@@ -74,7 +74,24 @@ async function creerElements(){
 /* Actualisation du prix et du nombre d'articles total */ 
 //==================================================================
 
+function actualisation(){  /*(appelé tout en bas) */ 
+  
+ let place = document.getElementsByClassName("itemQuantity")
 
+ console.log("me donne un tableauHTML,  j'ai mes elements : ", place)
+ console.log("n'est pas un tableau?", place[0])
+
+for (let i=0 ; i<place.length ; i++){
+   console.log("succes")   /* = Il ne me rends rien */ 
+ }
+
+ // ========================================== 
+
+ let placeA = document.querySelectorAll(".itemQuantity")
+ 
+ console.log("me donne une NodeListe vite : ", placeA)
+ 
+}
 
 
 
@@ -84,21 +101,14 @@ async function creerElements(){
 
 
 
- function suppression(){
-  placement = document.getElementsByClassName('deleteItem')
-  for(let i = 0; i<placement.length; i++) {
-  placement[i].addEventListener("click", afunction)
-  }
-}
-
-function afunction(){
-  console.log("aaa")
-}
 
 
 
 
 
-updatePriceQuantity()
 creerElements()
-suppression()
+updatePriceQuantity()
+
+
+actualisation() 
+// j'appelle actualisation a la fin, donc mon HTML est deja créer
