@@ -152,7 +152,7 @@ const errorVille = document.getElementById("cityErrorMsg")
 const errorAddresse = document.getElementById("addressErrorMsg")
 const errorEmail = document.getElementById("emailErrorMsg")
 
-const regexAlphabet = /^[A-Za-z]+$/;
+const regexAlphabet = /^([a-zA-Z\u0080-\u024F]+(?:. |-| |'))*[a-zA-Z\u0080-\u024F]*$/;
 const regexEmail = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
 // =================================================
  bouton.addEventListener("click", function(e){
@@ -160,7 +160,7 @@ const regexEmail = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0
 
   // validation prénom 
 
-     if (regexAlphabet.test(prenom.value) === false){
+     if ((regexAlphabet.test(prenom.value) === false) || ((prenom.value) === "")){
       e.preventDefault()
       error.innerText = "Renseignez votre prénom"
      }else{
@@ -170,7 +170,7 @@ const regexEmail = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0
 
   // validation nom
 
-     if (regexAlphabet.test(nom.value) === false){
+     if ((regexAlphabet.test(nom.value) === false) || (nom.value) === ""){
       e.preventDefault()
       errorNom.innerText = "Renseignez votre nom"
      }else{
@@ -180,7 +180,7 @@ const regexEmail = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0
 
   // validation ville
 
-     if (regexAlphabet.test(ville.value) === false){
+     if ((regexAlphabet.test(ville.value) === false) || (ville.value) === ""){
       e.preventDefault()
       errorVille.innerText = "Renseignez votre Ville"
      }else{
@@ -211,3 +211,62 @@ const regexEmail = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0
 creerElements()
 actualisationQuantitee()
 validationFormulaire()
+
+
+
+/* ========================================= */ 
+
+//  Requête POST pour envoyer les données a l'API
+function envoiApi(){
+
+const prenom = document.getElementById("firstName")
+const nom = document.getElementById("lastName")
+const addresse = document.getElementById("address")
+const ville = document.getElementById("city")
+const email = document.getElementById("email")
+
+
+const produitsLocal = rameneLocalStorage()
+let idProduits = []
+
+for (let i=0; produitsLocal[i]; i++){
+  idProduits.push(produitsLocal[i].id)
+}
+
+
+  const ecouteFormulaire = document.getElementsByClassName("cart__order__form")
+  ecouteFormulaire[0].addEventListener("click", function(e){
+    const produitsDuLocal = rameneLocalStorage()
+    if (produitsDuLocal == 0){
+      alert("Selectionnez un produit")
+      e.preventDefault()
+    }else{
+    const donneesPourApi = {
+      contact: {
+        firstName : prenom.value,
+        lastName : nom.value,
+        address : addresse.value,
+        city : ville.value,
+        email : email.value
+      },
+      products: {
+        product : idProduits
+      }
+    };
+
+fetch("http://localhost:3000/api/products/order", {
+  method: "POST",
+  headers: { 
+    
+    "Content-Type": "application/json" },
+    body : JSON.stringify(donneesPourApi),
+})
+.then((res) => res.json())
+.then((promise) => console.log(promise))
+    }
+  } )
+
+}
+
+
+envoiApi()
