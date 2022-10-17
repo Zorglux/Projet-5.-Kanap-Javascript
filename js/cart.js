@@ -217,8 +217,8 @@ validationFormulaire()
 /* ========================================= */ 
 
 //  Requête POST pour envoyer les données a l'API
-function envoiApi(){
 
+function envoiApi(){
 const prenom = document.getElementById("firstName")
 const nom = document.getElementById("lastName")
 const addresse = document.getElementById("address")
@@ -230,43 +230,70 @@ const produitsLocal = rameneLocalStorage()
 let idProduits = []
 
 for (let i=0; produitsLocal[i]; i++){
-  idProduits.push(produitsLocal[i].id)
+  idProduits.push(produitsLocal[i].identifiant)
 }
 
 
-  const ecouteFormulaire = document.getElementsByClassName("cart__order__form")
-  ecouteFormulaire[0].addEventListener("click", function(e){
-    const produitsDuLocal = rameneLocalStorage()
-    if (produitsDuLocal == 0){
-      alert("Selectionnez un produit")
-      e.preventDefault()
-    }else{
-    const donneesPourApi = {
+
+
+
+const ecouteFormulaire = document.getElementsByClassName("cart__order__form")
+ecouteFormulaire[0].addEventListener("click", function(e){
+  const produitsDuLocal = rameneLocalStorage()
+  if (produitsDuLocal == 0){
+    alert("Selectionnez un produit")
+    e.preventDefault()
+  }else{
+    const body = {
+        contact: {
+          firstName : prenom.value,
+          lastName : nom.value,
+          address : addresse.value,
+          city : ville.value,
+          email : email.value
+        },
+        products : idProduits
+        };
+
+
+
+ /*   const body = {
       contact: {
-        firstName : prenom.value,
-        lastName : nom.value,
-        address : addresse.value,
-        city : ville.value,
-        email : email.value
+        firstName:"couisine",
+        lastName: "suce",
+        address: "putt",
+        city: "aaaaah",
+        email: "voileeeh"
       },
-      products: {
-        product : idProduits
-      }
-    };
+      products: idProduits
 
-fetch("http://localhost:3000/api/products/order", {
-  method: "POST",
-  headers: { 
+      };
+   */    
+      
+
+
     
-    "Content-Type": "application/json" },
-    body : JSON.stringify(donneesPourApi),
-})
-.then((res) => res.json())
-.then((promise) => console.log(promise))
-    }
-  } )
+  fetch("http://localhost:3000/api/products/order", {
+    method : "POST",
+    headers : {"Content-type": "application/json" },
+    body: JSON.stringify(body),
+  })
+    .then((res) => res.json())
+    .then((promise) => console.log(promise))
 
+
+  }
+ })
 }
+
 
 
 envoiApi()
+
+
+function utilisationUrlApi(infoApi){
+  window.location.search = zaeaz
+}
+
+
+
