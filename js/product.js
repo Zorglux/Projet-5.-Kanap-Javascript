@@ -6,6 +6,9 @@ fetch(urlDeBase+id)
 .then ((response) => response.json())
 .then ((donnees)  =>  creation(donnees))
 /* ===================================================== */ 
+
+/* creation() ramène les info dont j'ai besoin
+   pour afficher l'élément sur la page    */
 function creation(donneesCanape){
  const nom = donneesCanape.name
  const imageUrl = donneesCanape.imageUrl
@@ -15,34 +18,40 @@ function creation(donneesCanape){
  const couleurs = donneesCanape.colors
 
 
- creationNom(nom)
+ creationNom(nom)  
  creationImage(imageUrl, imageAlt)
- creationPrix(prix)
- creationDescription(description)
- creationCouleurs(couleurs)
+ creationPrix(prix)  
+ creationDescription(description)  
+ creationCouleurs(couleurs) 
 }
 /* ========================================================== */ 
 
-function creationImage(url, alt){
+
+ /* ramene l'image et son AltTxt */ 
+function creationImage(url, alt){ 
 document.querySelector(".item__img").
 innerHTML = `<img src=${url} alt=${alt}>`
 }
 
+/* ramène le nom */ 
 function creationNom(nom){
  document.getElementById("title").
  innerText = nom
 }
 
+/* ramène le prix */
 function creationPrix(prix){
     document.getElementById("price").
     innerText = prix
 }
 
+/* ramène la description */
 function creationDescription(description){
     document.getElementById("description").
     innerText = description
 }
 
+/* ramène les couleurs */ 
 function creationCouleurs(couleurs){
     const input = document.getElementById("colors")
     couleurs.map(couleur => {
@@ -80,11 +89,14 @@ bouton.addEventListener("click", function(event){
 
 /* ============================================================= */ 
 // FONCTIONS QUE J'APPELLE POUR MON LOCALSTORAGE
-/* ============================================================= */ 
+/* ============================================================= */
+
+/* converti en JSON et place dans le localStorage */ 
 function metsDansPanier(panier){
     localStorage.setItem("panier", JSON.stringify(panier))
 }
 
+/* converti en Javascript et ramène du localStorage */ 
 function rameneDuPanier(){
     let panier = localStorage.getItem("panier")
     if (panier == null){
@@ -94,6 +106,8 @@ function rameneDuPanier(){
     }
 }
 
+/* ajoute le produits au localStorage, vérifie si le produit est 
+   deja présent, pour incrémenter son nombre si c'est le cas */ 
 function ajouterAuPanier(produit){
 
  let panier = rameneDuPanier()

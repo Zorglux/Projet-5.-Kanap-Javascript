@@ -1,3 +1,5 @@
+/* récolte les informations de l'api en fonction d'un ID. 
+  (informations d'un seul produit a chaque fois ) */ 
 async function apiParId(id) {
   let url = `http://localhost:3000/api/products/${id}`
 
@@ -8,13 +10,16 @@ async function apiParId(id) {
     console.error(error);
   }
 }
-// ============================================
 
+
+/* ramène les éléments de mon localStorage */ 
 function rameneLocalStorage() {
   return JSON.parse(localStorage.getItem("panier"));
 }
-// =============================================
 
+
+/* recalcule le montant et le prix total pour l'afficher sur le 
+   récapitulatif du panier */ 
 async function actualisationQuantitee() {
   let localStorage = rameneLocalStorage();
   let prix = 0;
@@ -33,6 +38,8 @@ async function actualisationQuantitee() {
 }
 // ==========================================================
 
+/* utilises toute les informations pour placer les éléments
+  du localStorage sur la page */ 
 async function creerElements(){
   let localObjet = rameneLocalStorage()
 
@@ -68,7 +75,7 @@ async function creerElements(){
 
     placement.appendChild(article)
 
-    // ===================================================================
+// =================================================================
 /* Calcul du prix et du nombre d'articles total */ 
 //==================================================================
     let placementInput = article.getElementsByClassName('itemQuantity');
@@ -77,8 +84,7 @@ async function creerElements(){
       actualisationLocalStorage(e, localObjet[i].id, localObjet[i].color);
     });
     
-    
-
+    /* recalcule les montants a chaque changement de l'input. */ 
     async function actualisationLocalStorage(q, id, color) {
       let local = rameneLocalStorage();
       let idLocal = [];
@@ -93,7 +99,7 @@ async function creerElements(){
         idLocal.push(local[i].id);
       }
     
-      // ----- change the value of the quantity and push it to localStorage ----- //
+ /*   change les montants pour les remettre dans le localStorage */
       local[index].montant = q.target.value;
       localStorage.setItem("panier", JSON.stringify(local));
 
@@ -101,7 +107,8 @@ async function creerElements(){
 
               actualisationQuantitee()
             }
-
+            
+         /* supprime l'élément du localStorage et du dom au clic */ 
             function suppression(){
               let boutonSupprimer =  article.getElementsByClassName("deleteItem")
               let idParBouton = boutonSupprimer[0].closest("article").getAttribute("data-id")
@@ -120,101 +127,86 @@ async function creerElements(){
               
               })
             }
-            suppression()
-            
-           
-    }
+            suppression()    
+     }
 }
-
-
-
-
-
-
-
-
-
 
 
 // ==============================================================
 /* VALIDATION DU FORMULAIRE */ 
 
 function validationFormulaire(){
-const formulaire = document.getElementById("order")
+
+const bouton = document.getElementById("order")
 
 const prenom = document.getElementById("firstName")
 const nom = document.getElementById("lastName")
-const addresse = document.getElementById("address")
 const ville = document.getElementById("city")
+const addresse = document.getElementById("address")
 const email = document.getElementById("email")
 
+
 const error = document.getElementById("firstNameErrorMsg")
-const error2 = document.getElementById("lastNameErrorMsg")
-const error3= document.getElementById("addressErrorMsg")
-const error4 = document.getElementById("cityErrorMsg")
-const error5 = document.getElementById("emailErrorMsg")
+const errorNom = document.getElementById("lastNameErrorMsg")
+const errorVille = document.getElementById("cityErrorMsg")
+const errorAddresse = document.getElementById("addressErrorMsg")
+const errorEmail = document.getElementById("emailErrorMsg")
+
+const regexAlphabet = /^[A-Za-z]+$/;
+const regexEmail = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
 // =================================================
+ bouton.addEventListener("click", function(e){
+  
 
-formulaire.addEventListener("click", function(){
-  if (prenom.value == '' || prenom.value == null){
+  // validation prénom 
 
-    error.innerText = "Veuillez renseigner votre prénom" 
-  }else{
-    error.remove()
-  }
-})
+     if (regexAlphabet.test(prenom.value) === false){
+      e.preventDefault()
+      error.innerText = "Renseignez votre prénom"
+     }else{
+      error.innerText = ""
+     }
 
-// ===========
 
-formulaire.addEventListener("click", function(){
-  if (nom.value == '' || nom.value == null){
+  // validation nom
 
-    error2.innerText = "Veuillez renseigner votre nom de famille" 
-  }else{
-    error2.remove()
-  }
-})
+     if (regexAlphabet.test(nom.value) === false){
+      e.preventDefault()
+      errorNom.innerText = "Renseignez votre nom"
+     }else{
+      errorNom.innerText = ""
+     }
 
-// ==========
 
-formulaire.addEventListener("click", function(){
-  if (addresse.value == '' || addresse.value == null){
+  // validation ville
 
-    error3.innerText = "Veuillez renseigner votre adresse" 
-  }else{
-    error3.remove()
-  }
-})
+     if (regexAlphabet.test(ville.value) === false){
+      e.preventDefault()
+      errorVille.innerText = "Renseignez votre Ville"
+     }else{
+      errorVille.innerText = ""
+     }
 
-// ==========
+  // validation addresse 
+     
+    if ((addresse.value) === ""){
+      e.preventDefault
+      errorAddresse.innerText = "Renseignez votre addresse"
+    } else {
+      errorAddresse.innerText = ""
+    }
 
-formulaire.addEventListener("click", function(){
-  if (ville.value == '' || ville.value == null){
+  // validation email
 
-    error4.innerText = "Veuillez renseigner votre ville" 
-  }else{
-    error4.remove()
-  }
-})
- 
-// ==========
-
-formulaire.addEventListener("click", function(){
-  if (email.value == '' || email.value == null){
-
-    error5.innerText = "Veuillez renseigner votre email" 
-  }else{
-    error5.remove()
-  }
-})
+    if (regexEmail.test(email.value) === false){
+      e.preventDefault
+      errorEmail.innerText = "Renseignez votre email"
+    } else {
+      errorEmail.innerText = ""
+    }
+ })
 }
-
-
 // ==================================================
-
-
-
-
 
 creerElements()
 actualisationQuantitee()

@@ -4,6 +4,11 @@ fetch(url)
 .then((res) => res.json())
 .then((response) => placement(response))
 
+
+
+
+/* placement() se sert du fetch pour placer les 
+   élements sur la page */ 
 function placement(donnees){
   document.getElementById("items").innerHTML = 
   donnees.map(canape => 
