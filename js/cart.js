@@ -238,7 +238,7 @@ for (let i=0; produitsLocal[i]; i++){
 
 
 const ecouteFormulaire = document.getElementsByClassName("cart__order__form")
-ecouteFormulaire[0].addEventListener("click", function(e){
+ecouteFormulaire[0].addEventListener("submit", function(e){
   const produitsDuLocal = rameneLocalStorage()
   if (produitsDuLocal == 0){
     alert("Selectionnez un produit")
@@ -254,46 +254,26 @@ ecouteFormulaire[0].addEventListener("click", function(e){
         },
         products : idProduits
         };
-
-
-
- /*   const body = {
-      contact: {
-        firstName:"couisine",
-        lastName: "suce",
-        address: "putt",
-        city: "aaaaah",
-        email: "voileeeh"
-      },
-      products: idProduits
-
-      };
-   */    
       
-
-
-    
+        
   fetch("http://localhost:3000/api/products/order", {
     method : "POST",
     headers : {"Content-type": "application/json" },
     body: JSON.stringify(body),
   })
     .then((res) => res.json())
-    .then((promise) => console.log(promise))
-
-
+    .then((promise) => recupereIdCommande(promise.orderId))
   }
  })
 }
 
+function recupereIdCommande(idCommande){
+  window.location.href = "http://127.0.0.1:5501/html/confirmation.html?id="+idCommande
+}
 
 
 envoiApi()
 
-
-function utilisationUrlApi(infoApi){
-  window.location.search = zaeaz
-}
 
 
 
