@@ -218,12 +218,12 @@ const articlesTotaux = document.getElementById("totalQuantity")
     }
  })
 }
-// ==================================================
+// ================================================
 
 
 
 
-/* ========================================= */ 
+/* ======================================= */ 
 
 //  Requête POST pour envoyer les données a l'API
 
@@ -281,12 +281,9 @@ function recupereIdCommande(idCommande){
 }
 
 
-
+// j'appelle mes fonctions 
 creerElements()
 actualisationQuantitee()
 validationFormulaire()
 envoiApi()
-
-
-
 
