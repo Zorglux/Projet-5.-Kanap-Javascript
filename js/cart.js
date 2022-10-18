@@ -44,10 +44,11 @@ async function creerElements(){
   let localObjet = rameneLocalStorage()
 
   // creation des élements
+  
   for (let i=0; localObjet[i]; i++){
     let donneesApi = await apiParId(localObjet[i].identifiant)
     const placement = document.getElementById("cart__items")
-
+  
     const article = document.createElement("article")
     article.classList.add("cart__item")
     article.setAttribute("data-id", `${localObjet[i].id}`)
@@ -89,9 +90,11 @@ async function creerElements(){
       let local = rameneLocalStorage();
       let idLocal = [];
       let index;
-      // error handling
+
+      // gestion erreur
       if (q.target.value <= 0)
         return -1;
+
       // ----- On mets l'index dans notre tableau ----- //
       for (let i = 0; local[i]; i++) {
         if (local[i].id == id && local[i].color == color)
@@ -156,9 +159,18 @@ const regexAlphabet = /^([a-zA-Z\u0080-\u024F]+(?:. |-| |'))*[a-zA-Z\u0080-\u024
 const regexEmail = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
 // =================================================
  bouton.addEventListener("click", function(e){
-  
 
-  // validation prénom 
+const articlesTotaux = document.getElementById("totalQuantity")
+
+   // regarde si il y a un produit dans le panier
+
+   if (articlesTotaux.innerText === "" || articlesTotaux.innerText == 0){
+    e.preventDefault()
+    alert("Veuillez mettre un produit dans votre panier")
+   }
+
+
+   // validation prénom 
 
      if ((regexAlphabet.test(prenom.value) === false) || ((prenom.value) === "")){
       e.preventDefault()
@@ -208,9 +220,6 @@ const regexEmail = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0
 }
 // ==================================================
 
-creerElements()
-actualisationQuantitee()
-validationFormulaire()
 
 
 
@@ -237,14 +246,12 @@ for (let i=0; produitsLocal[i]; i++){
 
 
 
+
 const ecouteFormulaire = document.getElementsByClassName("cart__order__form")
 ecouteFormulaire[0].addEventListener("submit", function(e){
-  const produitsDuLocal = rameneLocalStorage()
-  if (produitsDuLocal == 0){
-    alert("Selectionnez un produit")
-    e.preventDefault()
-  }else{
-    const body = {
+ 
+
+     { const body = {
         contact: {
           firstName : prenom.value,
           lastName : nom.value,
@@ -263,15 +270,21 @@ ecouteFormulaire[0].addEventListener("submit", function(e){
   })
     .then((res) => res.json())
     .then((promise) => recupereIdCommande(promise.orderId))
-  }
- })
+     }
+    }
+ )
 }
+
 
 function recupereIdCommande(idCommande){
   window.location.href = "http://127.0.0.1:5501/html/confirmation.html?id="+idCommande
 }
 
 
+
+creerElements()
+actualisationQuantitee()
+validationFormulaire()
 envoiApi()
 
 
